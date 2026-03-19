@@ -13,10 +13,13 @@
         name: 'create-nojekyll',
         closeBundle() {
           writeFileSync('dist/.nojekyll', '');
-          // Copy CNAME if it exists
-          const cnamePath = 'public/CNAME';
-          if (existsSync(cnamePath)) {
-            copyFileSync(cnamePath, 'dist/CNAME');
+          // Copy CNAME if it exists (check root first, then public/)
+          const cnamePaths = ['CNAME', 'public/CNAME'];
+          for (const cnamePath of cnamePaths) {
+            if (existsSync(cnamePath)) {
+              copyFileSync(cnamePath, 'dist/CNAME');
+              break;
+            }
           }
         }
       }
